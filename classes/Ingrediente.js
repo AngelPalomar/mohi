@@ -1,8 +1,6 @@
 class Ingrediente {
-    constructor(nombre, fecha, ultimaModificacion, activo) {
+    constructor(nombre, activo) {
         this.nombre = nombre;
-        this.fecha = fecha;
-        this.ultimaModificacion = ultimaModificacion;
         this.activo = activo;
     }
 }

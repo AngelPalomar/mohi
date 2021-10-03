@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Alert, BackHandler } from 'react-native'
 import {
     createDrawerNavigator, DrawerContentScrollView, DrawerItemList
 } from '@react-navigation/drawer';
-import { Box, Heading, Text, Avatar } from 'native-base'
+import { Box, Heading, Text, Avatar, Divider } from 'native-base'
+import firebase from '../../data/firebase'
 
 /**Icons */
 import { FontAwesome } from '@expo/vector-icons'
@@ -12,17 +14,50 @@ import Home from './Home';
 import Profile from './Profile';
 
 const CustomDrawer = (props) => {
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            () => {
+                Alert.alert(
+                    'Cerrar sesión',
+                    '¿Estás seguro de salir?',
+                    [{
+                        text: 'Salir',
+                        onPress: () => {
+                            firebase.auth.signOut().then(() => {
+                                props.navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Login' }],
+                                })
+                                props.navigation.navigate('Login')
+                            })
+                        }
+                    },
+                    {
+                        text: 'Cancelar',
+                        style: 'cancel'
+                    }],
+                    { cancelable: true }
+                )
+                return true;
+            });
+
+        return () => backHandler.remove();
+    }, [])
+
     return (
         <DrawerContentScrollView {...props}>
             <Box p={5}>
                 <Avatar
                     mb={2}
-                    source={{ uri: 'https://static.wikia.nocookie.net/avatar/images/f/fa/Aang_en_el_Drag%C3%B3n_del_Jazm%C3%ADn.png/revision/latest?cb=20150414231706&path-prefix=es' }}>
+                    source={{ uri: firebase.auth.currentUser.photoURL }}>
                     SS
                 </Avatar>
-                <Heading>Juan <Heading color='primary.500'>Pérez</Heading> </Heading>
-                <Text color='coolGray.500' fontSize={12}>juan@hotmail.com</Text>
+                <Heading>{firebase.auth.currentUser.displayName}</Heading>
+                <Text color='coolGray.500' fontSize={12}>{firebase.auth.currentUser.email}</Text>
             </Box>
+            <Divider my={2} />
             <DrawerItemList {...props} />
         </DrawerContentScrollView>
     )

@@ -1,7 +1,7 @@
 class Usuario {
     constructor(email, password, nombres, apellidos, telefono, direccion,
-        estado, pais, fotoPerfilUrl, peso, estatura, enfermedades, alergias, tipoUsuario,
-        activo, fechaRegistro, fechaUltimoAcceso) {
+        estado, pais, edad, sexo, peso, estatura, enfermedades, alergias, tipoUsuario,
+        activo, fechaRegistro, idUsuario) {
         this.email = email;
         this.password = password;
         this.nombres = nombres;
@@ -10,7 +10,8 @@ class Usuario {
         this.direccion = direccion;
         this.estado = estado;
         this.pais = pais;
-        this.fotoPerfilUrl = fotoPerfilUrl;
+        this.edad = edad;
+        this.sexo = sexo;
         this.peso = peso;
         this.estatura = estatura;
         this.enfermedades = enfermedades;
@@ -18,7 +19,7 @@ class Usuario {
         this.tipoUsuario = tipoUsuario;
         this.activo = activo;
         this.fechaRegistro = fechaRegistro;
-        this.fechaUltimoAcceso = fechaUltimoAcceso;
+        this.idUsuario = idUsuario;
     }
 }
 
