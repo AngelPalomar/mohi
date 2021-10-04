@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Login from './pages/public/Login'
 import Register from "./pages/public/Register";
 import Menu from "./pages/private/Menu";
+import EditProfile from "./pages/private/EditProfile";
 
 // extend the theme
 const theme = extendTheme({
@@ -58,6 +59,13 @@ export default function App() {
                         component={Menu}
                         options={{
                             headerShown: false
+                        }} />
+                    <Stack.Screen
+                        name={'EditProfile'}
+                        component={EditProfile}
+                        options={{
+                            headerShown: true,
+                            title: ''
                         }} />
                 </Stack.Navigator>
             </NavigationContainer>
