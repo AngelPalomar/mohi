@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Alert } from 'react-native'
 import {
     Heading, FormControl, Input, VStack, Box, Button, ScrollView,
-    Slider, Select
+    Slider, Select, Image
 } from 'native-base'
 import firebase from '../../data/firebase'
 
@@ -12,6 +12,9 @@ import Usuario from '../../classes/Usuario';
 /**Utils */
 import { DateFormat } from '../../utils/DateFormat';
 import { emailValidation, minLenghtValidation } from '../../utils/Validations';
+
+/**Images */
+import banner from '../../assets/decorative/register_banner.jpg'
 
 export default function Register({ navigation }) {
     const [usuario, setUsuario] = useState(new Usuario(
@@ -306,6 +309,11 @@ export default function Register({ navigation }) {
                     </Button>
                 </VStack>
             </Box>
+            <Image
+                source={banner}
+                alt={'banner.jpg'}
+                h={180}
+                borderTopRadius={16} />
         </ScrollView>
     )
 }

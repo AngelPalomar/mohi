@@ -2,12 +2,15 @@ import React, { useState } from 'react'
 import { Alert } from 'react-native'
 import {
     Heading, Text, FormControl, Input, VStack, Box, Button, HStack,
-    ScrollView
+    ScrollView, Image
 } from 'native-base'
 import firebase from '../../data/firebase'
 
 /**Utils */
 import { emailValidation, minLenghtValidation } from '../../utils/Validations'
+
+/**Images */
+import banner from '../../assets/decorative/login_banner.jpg'
 
 export default function Login({ navigation }) {
 
@@ -65,7 +68,12 @@ export default function Login({ navigation }) {
 
     return (
         <ScrollView>
-            <Box safeArea flex={1} p={2} py={8} px={5} w='100%'>
+            <Image
+                source={banner}
+                alt={'banner.jpg'}
+                h={180}
+                borderBottomRadius={16} />
+            <Box safeArea flex={1} p={2} px={5} w='100%'>
                 <Heading color='black' size='lg'>
                     Bienvenido a
                     <Heading color='primary.500'> MOHI</Heading>

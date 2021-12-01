@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Alert } from 'react-native'
 import {
     Box, Text, Heading, FormControl, VStack, Input,
     Slider, Select, Spinner, Checkbox, ScrollView, Button,
@@ -11,7 +10,7 @@ import firebase from '../../data/firebase'
 import Usuario from '../../classes/Usuario';
 
 /**Utils */
-import { minLenghtValidation } from '../../utils/Validations';
+/* import { minLenghtValidation } from '../../utils/Validations'; */
 
 export default function EditProfile(props) {
     const [usuario, setUsuario] = useState(new Usuario())

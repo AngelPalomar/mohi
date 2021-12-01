@@ -1,10 +1,15 @@
 import React from 'react'
-import { Box, VStack, HStack, Heading, Text } from 'native-base'
+import { Box, ScrollView } from 'native-base'
+
+/**Components */
+import BarraCategoria from '../../components/common/BarraCategoria/BarraCategoria'
 
 export default function Home() {
     return (
-        <Box>
-            <Text>Home</Text>
-        </Box>
+        <ScrollView>
+            <Box p={2}>
+                <BarraCategoria />
+            </Box>
+        </ScrollView>
     )
 }

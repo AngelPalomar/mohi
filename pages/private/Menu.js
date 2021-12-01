@@ -3,15 +3,21 @@ import { Alert, BackHandler } from 'react-native'
 import {
     createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList
 } from '@react-navigation/drawer';
-import { Box, Heading, Text, Avatar, Button } from 'native-base'
+import {
+    Box, Heading, Text, Avatar, Button,
+    Image
+} from 'native-base'
 import firebase from '../../data/firebase'
 
 /**Icons */
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 
 /**Components */
 import Home from './Home';
 import Profile from './Profile';
+
+/**Images */
+import banner from '../../assets/decorative/menu_banner.jpg'
 
 const CustomDrawer = (props) => {
 
@@ -52,6 +58,10 @@ const CustomDrawer = (props) => {
 
     return (
         <DrawerContentScrollView {...props}>
+            <Image
+                source={banner}
+                alt={'banner.jpg'}
+                h={100} />
             <Box p={5}>
                 <Avatar
                     mb={2}
@@ -113,23 +123,13 @@ export default function Menu() {
                     )
                 }} />
             <Drawer.Screen
-                name='History'
+                name='FoodMenu'
                 component={Profile}
                 options={{
-                    title: 'Historial de pedidos',
-                    drawerLabel: 'Historial de pedidos',
+                    title: 'Mi menú diario',
+                    drawerLabel: 'Mi menú',
                     drawerIcon: () => (
-                        <FontAwesome name='history' size={23} color='#C42639' />
-                    )
-                }} />
-            <Drawer.Screen
-                name='PaymentMethod'
-                component={Profile}
-                options={{
-                    title: 'Métodos de pago',
-                    drawerLabel: 'Métodos de pago',
-                    drawerIcon: () => (
-                        <FontAwesome name='credit-card' size={21} color='#C42639' />
+                        <MaterialCommunityIcons name="food-apple" size={25} color="#C42639" />
                     )
                 }} />
         </Drawer.Navigator>
