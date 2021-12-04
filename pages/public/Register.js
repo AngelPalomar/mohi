@@ -17,26 +17,28 @@ import { emailValidation, minLenghtValidation } from '../../utils/Validations';
 import banner from '../../assets/decorative/register_banner.jpg'
 
 export default function Register({ navigation }) {
-    const [usuario, setUsuario] = useState(new Usuario(
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        1,
-        '',
-        0,
-        0,
-        [],
-        [],
-        'cliente',
-        true,
-        DateFormat(new Date().toString()),
-        ''
-    ))
+    const [usuario, setUsuario] = useState({
+        email: '',
+        password: '',
+        nombres: '',
+        apellidos: '',
+        telefono: '',
+        direccion: '',
+        estado: '',
+        pais: '',
+        edad: 1,
+        sexo: '',
+        peso: 0,
+        estatura: 0,
+        enfermedades: [],
+        alergias: [],
+        tipoUsuario: 'cliente',
+        activo: true,
+        fechaRegistro: DateFormat(new Date().toString()),
+        idUsuario: '',
+        menuDiario: []
+
+    })
     const [confirmarPassword, setConfirmarPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 

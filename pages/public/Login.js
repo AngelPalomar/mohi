@@ -73,12 +73,12 @@ export default function Login({ navigation }) {
                 alt={'banner.jpg'}
                 h={180}
                 borderBottomRadius={16} />
-            <Box safeArea flex={1} p={2} px={5} w='100%'>
+            <Box flex={1} p={2} px={5} my={4} w='100%'>
                 <Heading color='black' size='lg'>
                     Bienvenido a
                     <Heading color='primary.500'> MOHI</Heading>
                 </Heading>
-                <Text fontSize='lg' color='coolGray.500'>Comida sana, comida para tí</Text>
+                <Text fontSize='lg' color='coolGray.500'>Lo rico es estar sano</Text>
                 <Text fontSize='sm' color='coolGray.500'>Inicie sesión para continuar</Text>
                 <VStack mt={5} space={3}>
                     <FormControl>

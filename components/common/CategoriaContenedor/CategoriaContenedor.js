@@ -3,11 +3,11 @@ import { Text, Box, Image, Center } from 'native-base'
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable'
 
 function CategoriaContenedor(props) {
-    const { imagenUrl, nombre } = props
+    const { imagenUrl, nombre, key } = props
 
     return (
         <Pressable onPress={() => console.log(nombre)}>
-            <Box m={2}>
+            <Box m={2} key={key}>
                 <Center>
                     <Image
                         size={'sm'}

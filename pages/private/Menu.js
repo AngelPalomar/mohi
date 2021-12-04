@@ -15,9 +15,11 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 /**Components */
 import Home from './Home';
 import Profile from './Profile';
+import MenuDiario from './MenuDiario';
 
 /**Images */
 import banner from '../../assets/decorative/menu_banner.jpg'
+import { color } from 'styled-system';
 
 const CustomDrawer = (props) => {
 
@@ -123,8 +125,8 @@ export default function Menu() {
                     )
                 }} />
             <Drawer.Screen
-                name='FoodMenu'
-                component={Profile}
+                name='MenuDiario'
+                component={MenuDiario}
                 options={{
                     title: 'Mi menú diario',
                     drawerLabel: 'Mi menú',

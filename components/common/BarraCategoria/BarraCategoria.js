@@ -13,7 +13,7 @@ function BarraCategoria() {
     useEffect(() => {
         firebase.db
             .collection('categorias')
-            .orderBy('nombre')
+            .orderBy('nombre', 'asc')
             .get()
             .then((snapshot) => {
                 let c = [];
@@ -24,7 +24,7 @@ function BarraCategoria() {
                 setCategorias(c)
                 setIsLoading(false)
             })
-    }, [categorias])
+    }, [])
 
     if (isLoading) {
         return <Spinner size='lg' m={5} />
@@ -42,6 +42,7 @@ function BarraCategoria() {
                     {
                         categorias.map((value, index) => (
                             <CategoriaContenedor
+                                key={index}
                                 nombre={value.nombre}
                                 imagenUrl={value.imagen}
                             />

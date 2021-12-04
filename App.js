@@ -11,6 +11,8 @@ import Login from './pages/public/Login'
 import Register from "./pages/public/Register";
 import Menu from "./pages/private/Menu";
 import EditProfile from "./pages/private/EditProfile";
+import VerPlatillo from "./pages/private/VerPlatillo";
+import MenuDiario from "./pages/private/MenuDiario";
 
 // extend the theme
 const theme = extendTheme({
@@ -63,6 +65,20 @@ export default function App() {
                     <Stack.Screen
                         name={'EditProfile'}
                         component={EditProfile}
+                        options={{
+                            headerShown: true,
+                            title: ''
+                        }} />
+                    <Stack.Screen
+                        name={'VerPlatillo'}
+                        component={VerPlatillo}
+                        options={{
+                            headerShown: true,
+                            title: ''
+                        }} />
+                    <Stack.Screen
+                        name={'MenuDiario'}
+                        component={MenuDiario}
                         options={{
                             headerShown: true,
                             title: ''
