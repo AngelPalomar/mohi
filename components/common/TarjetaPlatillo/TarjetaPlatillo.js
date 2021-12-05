@@ -7,11 +7,11 @@ import Pressable from 'react-native/Libraries/Components/Pressable/Pressable'
 
 function TarjetaPlatillo(props) {
     const { imagenUrl, nombrePlatillo, categoria, verPlatilloPantalla,
-        key, botonQuitar, quitarDelMenu, isLoading } = props
+        botonQuitar, quitarDelMenu, isLoading } = props
 
     return (
         <Pressable onPress={() => verPlatilloPantalla()}>
-            <Box bgColor={'#FFF'} shadow={'2'} p={6} mb={2} borderRadius={12} key={key}>
+            <Box bgColor={'#FFF'} shadow={'2'} p={6} mb={2} borderRadius={12}>
                 <Image
                     source={{ uri: imagenUrl }}
                     alt={'imagenPlatillo.jpg'}
@@ -19,8 +19,8 @@ function TarjetaPlatillo(props) {
                     borderRadius={16}
                     w={'100%'}
                     mb={4} />
-                <Box flexDirection={'row'} justifyContent={'space-between'}>
-                    <Box width={'50%'}>
+                <Box>
+                    <Box>
                         <Text fontSize={20} w={'100%'}>
                             {nombrePlatillo}
                         </Text>
@@ -31,6 +31,7 @@ function TarjetaPlatillo(props) {
                     {
                         botonQuitar && (
                             <Button
+                                mt={4}
                                 size={'sm'}
                                 onPress={quitarDelMenu}
                                 isLoading={isLoading}
@@ -38,7 +39,7 @@ function TarjetaPlatillo(props) {
                                 leftIcon={
                                     <FontAwesome5 name="trash" size={16} color="white" />
                                 }>
-                                Quitar de mi menú
+                                Eliminar
                             </Button>
                         )
                     }

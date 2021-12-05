@@ -5,7 +5,9 @@ import { Box, Center, HStack, Spinner, Text } from 'native-base'
 /**Components */
 import CategoriaContenedor from '../CategoriaContenedor/CategoriaContenedor'
 
-function BarraCategoria() {
+function BarraCategoria(props) {
+
+    const { verCategoria } = props
 
     const [categorias, setCategorias] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -41,11 +43,13 @@ function BarraCategoria() {
                 <HStack>
                     {
                         categorias.map((value, index) => (
-                            <CategoriaContenedor
-                                key={index}
-                                nombre={value.nombre}
-                                imagenUrl={value.imagen}
-                            />
+                            <Box key={index}>
+                                <CategoriaContenedor
+                                    nombre={value.nombre}
+                                    imagenUrl={value.imagen}
+                                    verCategoria={verCategoria}
+                                />
+                            </Box>
                         ))
                     }
                 </HStack>

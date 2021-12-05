@@ -55,8 +55,7 @@ const MenuDiario = (props) => {
         //busca los menús
         firebase.db.collection('menus')
             .where('idDocUsuario', '==', firebase.auth.currentUser.uid)
-            .get()
-            .then(snapshot => {
+            .onSnapshot(snapshot => {
                 let m = [];
                 let lun = [];
                 let mar = [];
@@ -131,7 +130,6 @@ const MenuDiario = (props) => {
                     description: 'Platillo eliminado.'
                 })
                 setIsDeleting(false)
-                setReload(true)
             })
             .catch(() => {
                 toast.show({

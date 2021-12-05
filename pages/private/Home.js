@@ -60,21 +60,22 @@ export default function Home(props) {
     return (
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
             <Box p={2}>
-                <BarraCategoria />
+                <BarraCategoria verCategoria={props.navigation} />
                 <Box my={3}>
                     {
                         platillos.map((value, index) => (
-                            <TarjetaPlatillo
-                                key={index}
-                                imagenUrl={value.fotoUrl}
-                                nombrePlatillo={value.nombre}
-                                categoria={value.categoria}
-                                botonQuitar={false}
-                                verPlatilloPantalla={
-                                    () => props.navigation.navigate('VerPlatillo', {
-                                        nombrePlatillo: value.nombre
-                                    })}
-                            />
+                            <Box key={index}>
+                                <TarjetaPlatillo
+                                    imagenUrl={value.fotoUrl}
+                                    nombrePlatillo={value.nombre}
+                                    categoria={value.categoria}
+                                    botonQuitar={false}
+                                    verPlatilloPantalla={
+                                        () => props.navigation.navigate('VerPlatillo', {
+                                            nombrePlatillo: value.nombre
+                                        })}
+                                />
+                            </Box>
                         ))
                     }
                 </Box>

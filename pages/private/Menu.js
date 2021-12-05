@@ -63,7 +63,8 @@ const CustomDrawer = (props) => {
             <Image
                 source={banner}
                 alt={'banner.jpg'}
-                h={100} />
+                h={100}
+                borderBottomRadius={16} />
             <Box p={5}>
                 <Avatar
                     mb={2}

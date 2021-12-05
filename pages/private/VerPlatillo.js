@@ -42,6 +42,12 @@ function VerPlatillo(props) {
                         setIsLoading(false)
                     })
             })
+            .catch(() => {
+                toast.show({
+                    description: 'Platillo no encontrado'
+                })
+                props.navigation.goBack()
+            })
         return () => {
             setPlatillo([])
         }
@@ -67,6 +73,12 @@ function VerPlatillo(props) {
             }).then(() => {
                 toast.show({
                     description: `Se agregó ${platillo.nombre} al día ${diaSeleccionado}`
+                })
+                setIsLoadingAgregando(false);
+            })
+            .catch(() => {
+                toast.show({
+                    description: `Error al agregar el platillo.`
                 })
                 setIsLoadingAgregando(false);
             })
@@ -124,11 +136,15 @@ function VerPlatillo(props) {
                     <Text>{platillo.descripcion}</Text>
                 </Box>
                 <Box mb={sep}>
+                    <Text fontSize={16} fontWeight={'bold'}>Este platillo es especial para:</Text>
+                    <Text>{platillo.especial}</Text>
+                </Box>
+                <Box mb={sep}>
                     <Text fontSize={16} fontWeight={'bold'}>Ingredientes</Text>
                     {
-                        /* platillo.ingredientes.map((value, index) => (
+                        platillo.ingredientes.map((value, index) => (
                             <Text key={index}><Text color={'primary.500'}>&raquo; </Text>{value}</Text>
-                        )) */
+                        ))
                     }
                 </Box>
                 <Box>

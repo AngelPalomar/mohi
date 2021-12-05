@@ -13,6 +13,7 @@ import Menu from "./pages/private/Menu";
 import EditProfile from "./pages/private/EditProfile";
 import VerPlatillo from "./pages/private/VerPlatillo";
 import MenuDiario from "./pages/private/MenuDiario";
+import Categoria from "./pages/private/Categoria";
 
 // extend the theme
 const theme = extendTheme({
@@ -79,6 +80,13 @@ export default function App() {
                     <Stack.Screen
                         name={'MenuDiario'}
                         component={MenuDiario}
+                        options={{
+                            headerShown: true,
+                            title: ''
+                        }} />
+                    <Stack.Screen
+                        name={'Categoria'}
+                        component={Categoria}
                         options={{
                             headerShown: true,
                             title: ''
