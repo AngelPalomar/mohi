@@ -1,12 +1,13 @@
 import React from 'react'
-import { Box, Image, Text } from 'native-base'
+import { Box, Button, Image, Text, Icon } from 'native-base'
+import { FontAwesome5 } from '@expo/vector-icons';
 
 /** */
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable'
 
 function TarjetaPlatillo(props) {
     const { imagenUrl, nombrePlatillo, categoria, verPlatilloPantalla,
-        key } = props
+        key, botonQuitar, quitarDelMenu, isLoading } = props
 
     return (
         <Pressable onPress={() => verPlatilloPantalla()}>
@@ -18,12 +19,30 @@ function TarjetaPlatillo(props) {
                     borderRadius={16}
                     w={'100%'}
                     mb={4} />
-                <Text fontSize={20} w={'100%'}>
-                    {nombrePlatillo}
-                </Text>
-                <Text fontSize={12} w={'100%'} color={'muted.500'}>
-                    {categoria}
-                </Text>
+                <Box flexDirection={'row'} justifyContent={'space-between'}>
+                    <Box width={'50%'}>
+                        <Text fontSize={20} w={'100%'}>
+                            {nombrePlatillo}
+                        </Text>
+                        <Text fontSize={12} w={'100%'} color={'muted.500'}>
+                            {categoria}
+                        </Text>
+                    </Box>
+                    {
+                        botonQuitar && (
+                            <Button
+                                size={'sm'}
+                                onPress={quitarDelMenu}
+                                isLoading={isLoading}
+                                isLoadingText={'Quitando...'}
+                                leftIcon={
+                                    <FontAwesome5 name="trash" size={16} color="white" />
+                                }>
+                                Quitar de mi menú
+                            </Button>
+                        )
+                    }
+                </Box>
             </Box>
         </Pressable>
     )

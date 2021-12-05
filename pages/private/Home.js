@@ -69,6 +69,7 @@ export default function Home(props) {
                                 imagenUrl={value.fotoUrl}
                                 nombrePlatillo={value.nombre}
                                 categoria={value.categoria}
+                                botonQuitar={false}
                                 verPlatilloPantalla={
                                     () => props.navigation.navigate('VerPlatillo', {
                                         nombrePlatillo: value.nombre

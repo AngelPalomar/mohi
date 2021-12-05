@@ -128,7 +128,7 @@ export default function Menu() {
                 name='MenuDiario'
                 component={MenuDiario}
                 options={{
-                    title: 'Mi menú diario',
+                    title: 'Mi menú semanal',
                     drawerLabel: 'Mi menú',
                     drawerIcon: () => (
                         <MaterialCommunityIcons name="food-apple" size={25} color="#C42639" />

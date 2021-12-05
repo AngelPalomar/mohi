@@ -2,9 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { RefreshControl } from 'react-native'
 import {
     Box, Text, ScrollView, Spinner, Center,
-    Image
+    Image, Button, Icon, useToast, Toast
 } from 'native-base'
 import firebase from '../../data/firebase'
+import { AntDesign } from '@expo/vector-icons';
 
 /**Utils */
 import wait from '../../utils/wait'
@@ -17,15 +18,21 @@ import banner from '../../assets/decorative/menudiario_banner.png'
 
 const MenuDiario = (props) => {
 
-    const [usuarioIdDoc, setUsuarioIdDoc] = useState('')
-    const [menu, setMenu] = useState([])
-    const [hayPlatillos, setHayPlatillos] = useState(true)
+    const [noDia, setNoDia] = useState(0)
     const [isLoading, setIsLoading] = useState(true)
-    const usuarioRef = firebase.db.collection('usuarios').where('idUsuario', '==', firebase.auth.currentUser.uid);
-    const platilloRef = firebase.db.collection('platillos');
 
+    const [menuLunes, setmenuLunes] = useState([])
+    const [menuMartes, setmenuMartes] = useState([])
+    const [menuMiercoles, setmenuMiercoles] = useState([])
+    const [menuJueves, setmenuJueves] = useState([])
+    const [menuViernes, setmenuViernes] = useState([])
+    const [menuSabado, setmenuSabado] = useState([])
+    const [menuDomingo, setmenuDomingo] = useState([])
+
+    const [isDeleting, setIsDeleting] = useState(false)
     const [refreshing, setRefreshing] = useState(false)
     const [reload, setReload] = useState(false)
+    const toast = useToast();
 
     const onRefresh = useCallback(
         () => {
@@ -33,7 +40,6 @@ const MenuDiario = (props) => {
             setRefreshing(true)
 
             //Recarga los datos
-            setMenu([])
             setReload(true)
 
             //Para la carga
@@ -46,42 +52,122 @@ const MenuDiario = (props) => {
     useEffect(() => {
         setReload(false)
 
-        usuarioRef
-            .get().then(snapshot => {
-                //Traigo el ID
-                setUsuarioIdDoc(snapshot.docs[0].id);
-                let nombresPlatillos = snapshot.docs[0].data().menuDiario;
+        //busca los menús
+        firebase.db.collection('menus')
+            .where('idDocUsuario', '==', firebase.auth.currentUser.uid)
+            .get()
+            .then(snapshot => {
+                let m = [];
+                let lun = [];
+                let mar = [];
+                let mie = [];
+                let jue = [];
+                let vie = [];
+                let sab = [];
+                let dom = [];
 
-                if (nombresPlatillos.length > 0) {
-                    setHayPlatillos(true)
+                snapshot.docs.forEach(element => {
+                    m.push({ ...element.data(), id: element.id })
+                })
 
-                    let ps = [];
+                m.forEach(element => {
+                    switch (element.dia) {
+                        case 'lunes':
+                            lun.push(element)
+                            break;
+                        case 'martes':
+                            mar.push(element)
+                            break;
+                        case 'miercoles':
+                            mie.push(element)
+                            break;
+                        case 'jueves':
+                            jue.push(element)
+                            break;
+                        case 'viernes':
+                            vie.push(element)
+                            break;
+                        case 'sabado':
+                            sab.push(element)
+                            break;
+                        case 'domingo':
+                            dom.push(element)
+                            break;
 
-                    //Traigo la información de los platillos
-                    nombresPlatillos.forEach(element => {
-                        platilloRef.where('nombre', '==', element)
-                            .get()
-                            .then(snapshot => {
-                                ps.push(snapshot.docs[0].data())
-                            });
+                        default:
+                            break;
+                    }
+                })
 
-                        //Guardo los platillos
-                        setMenu(ps);
-                    });
+                setmenuLunes(lun)
+                setmenuMartes(mar)
+                setmenuMiercoles(mie)
+                setmenuJueves(jue)
+                setmenuViernes(vie)
+                setmenuSabado(sab)
+                setmenuDomingo(dom)
 
-                    //Para la carga
-                    setIsLoading(false)
-                } else {
-                    setHayPlatillos(false)
-                    //Para la carga
-                    setIsLoading(false)
-                }
+                //Para la carga 
+                setIsLoading(false)
             })
 
         return () => {
-            setUsuarioIdDoc('')
+            setmenuLunes([])
+            setmenuMartes([])
+            setmenuMiercoles([])
+            setmenuJueves([])
+            setmenuViernes([])
+            setmenuSabado([])
+            setmenuDomingo([])
         }
     }, [reload])
+
+    const eliminarPlatilloMenu = (idDoc) => {
+        setIsDeleting(true)
+        firebase.db.collection('menus').doc(idDoc)
+            .delete()
+            .then(() => {
+                toast.show({
+                    description: 'Platillo eliminado.'
+                })
+                setIsDeleting(false)
+                setReload(true)
+            })
+            .catch(() => {
+                toast.show({
+                    description: 'No se pudo eliminar el platillo.'
+                })
+                setIsDeleting(false)
+            })
+    }
+
+    const MenuSeleccionado = ({ menuDia }) => {
+        if (menuDia.length > 0) {
+            return (
+                <Box my={4}>
+                    {
+                        menuDia.map((value, index) => (
+                            <TarjetaPlatillo
+                                key={index}
+                                imagenUrl={value.fotoUrlPlatillo}
+                                nombrePlatillo={value.nombrePlatillo}
+                                categoria={value.categoriaProducto}
+                                botonQuitar={true}
+                                quitarDelMenu={() => eliminarPlatilloMenu(value.id)}
+                                isLoading={isDeleting}
+                                verPlatilloPantalla={
+                                    () => props.navigation.navigate('VerPlatillo', {
+                                        nombrePlatillo: value.nombre
+                                    })}
+                            />
+                        ))
+                    }
+                </Box>
+            )
+        } else {
+            return <Text textAlign={'center'} mt={10} fontSize={20}>No hay platillos para este día</Text>
+        }
+    }
 
     if (isLoading) {
         return <Spinner size={'lg'} m={5} />
@@ -95,33 +181,41 @@ const MenuDiario = (props) => {
                 h={'60px'}
                 borderBottomRadius={16} />
             <Box p={2}>
-                <Text>Aquí puedes ver una lista de tus platillos que has
-                    agregado a tu menú diario.
+                <Text textAlign={'center'}>Aquí puedes ver una lista de tus platillos que has
+                    agregado a tu menú semanal.
                 </Text>
                 <Box my={4}>
-                    {
-                        !hayPlatillos && (
-                            <Center mt={12}>
-                                <Text fontSize={20} textAlign={'center'}>
-                                    No has agregado ningún platillo a tu menú
-                                </Text>
-                            </Center>
-                        )
-                    }
-                    {
-                        menu.map((value, index) => (
-                            <TarjetaPlatillo
-                                key={index}
-                                imagenUrl={value.fotoUrl}
-                                nombrePlatillo={value.nombre}
-                                categoria={value.categoria}
-                                verPlatilloPantalla={
-                                    () => props.navigation.navigate('VerPlatillo', {
-                                        nombrePlatillo: value.nombre
-                                    })}
-                            />
-                        ))
-                    }
+                    <Box flexDirection='row' justifyContent='space-between' alignItems='center'>
+                        <Button
+                            onPress={() => setNoDia(noDia - 1)}
+                            disabled={noDia % 7 === 0 ? true : false}
+                            leftIcon={
+                                <Icon as={<AntDesign name="caretleft" color="white" />} size={18} />
+                            }></Button>
+                        <Text fontSize={22}>{
+                            noDia % 7 === 0 ? 'Lunes' :
+                                noDia % 7 === 1 ? 'Martes' :
+                                    noDia % 7 === 2 ? 'Miércoles' :
+                                        noDia % 7 === 3 ? 'Jueves' :
+                                            noDia % 7 === 4 ? 'Viernes' :
+                                                noDia % 7 === 5 ? 'Sábado' :
+                                                    noDia % 7 === 6 ? 'Domingo' : ''
+                        }</Text>
+                        <Button
+                            onPress={() => setNoDia(noDia + 1)}
+                            disabled={noDia % 7 === 6 ? true : false}
+                            rightIcon={
+                                <Icon as={<AntDesign name="caretright" color="white" />} size={18} />
+                            }></Button>
+                    </Box>
+                    <MenuSeleccionado menuDia={
+                        noDia % 7 === 0 ? menuLunes :
+                            noDia % 7 === 1 ? menuMartes :
+                                noDia % 7 === 2 ? menuMiercoles :
+                                    noDia % 7 === 3 ? menuJueves :
+                                        noDia % 7 === 4 ? menuViernes :
+                                            noDia % 7 === 5 ? menuSabado :
+                                                noDia % 7 === 6 ? menuDomingo : menuLunes} />
                 </Box>
             </Box>
         </ScrollView>

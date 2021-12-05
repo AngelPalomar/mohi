@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import {
     Box, Text, Spinner, Image, Button, Icon,
-    Center, ScrollView
+    Center, ScrollView, FormControl, Select,
+    useToast
 } from 'native-base'
 import firebase from '../../data/firebase'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -11,12 +12,16 @@ function VerPlatillo(props) {
 
     const [platillo, setPlatillo] = useState(null)
     const [usuario, setUsuario] = useState({})
+    const dias = [
+        "lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"
+    ]
+    const [diaSeleccionado, setDiaSeleccionado] = useState("")
     const [isLoading, setIsLoading] = useState(true)
     const [isLoadingAgregando, setIsLoadingAgregando] = useState(false)
-    const [platilloAgregado, setPlatilloAgregado] = useState(false)
 
     const usuarioRef = firebase.db.collection('usuarios').where('idUsuario', '==', firebase.auth.currentUser.uid);
     const platilloRef = firebase.db.collection('platillos').where('nombre', '==', nombrePlatillo);
+    const toast = useToast();
     const sep = 6;
 
     useEffect(() => {
@@ -34,10 +39,6 @@ function VerPlatillo(props) {
                             id: snapshot.docs[0].id
                         })
 
-                        //Verifica que tenga este platillo en el menú
-                        if (snapshot.docs[0].data().menuDiario.includes(p.nombre)) {
-                            setPlatilloAgregado(true)
-                        }
                         setIsLoading(false)
                     })
             })
@@ -47,26 +48,27 @@ function VerPlatillo(props) {
     }, [])
 
     const agregarPlatilloMenu = () => {
-        setIsLoadingAgregando(true);
-        firebase.db.collection('usuarios')
-            .doc(usuario.id)
-            .update({
-                menuDiario: firebase.firestore.FieldValue.arrayUnion(platillo.nombre)
-            }).then(() => {
-                setIsLoadingAgregando(false);
-                setPlatilloAgregado(true)
+        if (diaSeleccionado.trim().length === 0) {
+            toast.show({
+                description: 'Seleccione un día de la semana.'
             })
-    }
+            return;
+        }
 
-    const eliminarPlatilloMenu = () => {
-        setIsLoadingAgregando(true);
-        firebase.db.collection('usuarios')
-            .doc(usuario.id)
-            .update({
-                menuDiario: firebase.firestore.FieldValue.arrayRemove(platillo.nombre)
+        setIsLoadingAgregando(true)
+
+        firebase.db.collection('menus')
+            .add({
+                dia: diaSeleccionado,
+                nombrePlatillo: platillo.nombre,
+                categoriaProducto: platillo.categoria,
+                fotoUrlPlatillo: platillo.fotoUrl,
+                idDocUsuario: firebase.auth.currentUser.uid,
             }).then(() => {
+                toast.show({
+                    description: `Se agregó ${platillo.nombre} al día ${diaSeleccionado}`
+                })
                 setIsLoadingAgregando(false);
-                setPlatilloAgregado(false)
             })
     }
 
@@ -89,20 +91,31 @@ function VerPlatillo(props) {
                     <Text fontSize={12} color={'muted.600'}>{platillo.categoria}</Text>
                 </Box>
 
-                <Box mb={sep}>
-                    <Button
-                        onPress={!platilloAgregado ? agregarPlatilloMenu : eliminarPlatilloMenu}
-                        isLoading={isLoadingAgregando}
-                        w={'50%'}
-                        size={'sm'}
-                        leftIcon={
-                            !platilloAgregado ?
-                                <MaterialCommunityIcons name="food-drumstick-outline" size={20} color="white" /> :
-                                <MaterialCommunityIcons name="food-drumstick-off-outline" size={20} color="white" />
-                        }>
+                <Box mb={sep} flex={12}>
+                    <Text fontSize={16} fontWeight={'bold'}>Agregar a mi menú semanal</Text>
+                    <Select
+                        mb={2}
+                        accessibilityLabel='Selecciona un día de la semana'
+                        placeholder='Selecciona un día de la semana'
+                        onValueChange={(item) => setDiaSeleccionado(item)}>
                         {
-                            !platilloAgregado ? 'Añadir a mi menú' : 'Eliminar de mi menú'
+                            dias.map((value, index) => (
+                                <Select.Item
+                                    key={index}
+                                    _text={{ fontSize: 18 }}
+                                    label={value.toUpperCase()}
+                                    value={value} />
+                            ))
                         }
+                    </Select>
+                    <Button
+                        onPress={agregarPlatilloMenu}
+                        isLoading={isLoadingAgregando}
+                        isLoadingText={`Agregando platillo al ${diaSeleccionado}`}
+                        flex={6}
+                        size={'sm'}
+                        leftIcon={<MaterialCommunityIcons name="food-drumstick-outline" size={20} color="white" />}>
+                        Añadir a mi menú
                     </Button>
                 </Box>
 
@@ -113,9 +126,9 @@ function VerPlatillo(props) {
                 <Box mb={sep}>
                     <Text fontSize={16} fontWeight={'bold'}>Ingredientes</Text>
                     {
-                        platillo.ingredientes.map((value, index) => (
+                        /* platillo.ingredientes.map((value, index) => (
                             <Text key={index}><Text color={'primary.500'}>&raquo; </Text>{value}</Text>
-                        ))
+                        )) */
                     }
                 </Box>
                 <Box>
